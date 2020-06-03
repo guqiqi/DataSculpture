@@ -1,3 +1,5 @@
+package dataCollector.dataCollector;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -7,7 +9,7 @@ import java.nio.charset.Charset;
 import java.sql.Timestamp;
 
 public class JsonReaderToFile {
-	static String fileName = "like" ;
+	static String fileName = "hate" ;
 	static String thinkgearHost = "127.0.0.1";
 	static int thinkgearPort = 13854;
 	static String command = "{\"enableRawOutput\": false, \"format\": \"Json\"}\n";
@@ -29,6 +31,7 @@ public class JsonReaderToFile {
 	public static String highGamma;
 	public static String blinkStrength;
 	public static void main(String[] args) throws IOException, JSONException {
+		System.out.println(new File("").getAbsolutePath());
 		System.out.println("Connecting to host = " + thinkgearHost + ", port = " + thinkgearPort);
 		Socket clientSocket = new Socket(thinkgearHost, thinkgearPort);
 		input = clientSocket.getInputStream();
@@ -98,7 +101,7 @@ public class JsonReaderToFile {
 	}
 	public static void writeFile(String text){
 		try{
-			File file = new File(".\\dataCollector\\dataFile\\"+fileName + ".txt");
+			File file = new File(new File("").getAbsolutePath() + "\\src\\main\\java\\dataCollector\\dataFile\\"+fileName + ".txt");
 			FileWriter fileWriter = new FileWriter(file,true);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(text+"\r\n");

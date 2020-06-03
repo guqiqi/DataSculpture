@@ -1,7 +1,10 @@
+package dataCollector;
+
 import java.sql.Timestamp;
 
 public class EEGData {
     Timestamp occurTime;
+
     int attention;
     int meditation;
     int theta;
@@ -30,5 +33,49 @@ public class EEGData {
         this.highBeta = highBeta;
         this.lowGamma = lowGamma;
         this.highGamma = highGamma;
+    }
+
+    public Timestamp getOccurTime () {
+        return occurTime;
+    }
+
+    public int getAttention () {
+        return attention;
+    }
+
+    public int getMeditation () {
+        return meditation;
+    }
+
+    public int getTheta () {
+        return theta;
+    }
+
+    public int getDelta () {
+        return delta;
+    }
+
+    public int getLowAlpha () {
+        return lowAlpha;
+    }
+
+    public int getHighAlpha () {
+        return highAlpha;
+    }
+
+    public int getLowBeta () {
+        return lowBeta;
+    }
+
+    public int getHighBeta () {
+        return highBeta;
+    }
+
+    public int getLowGamma () {
+        return lowGamma;
+    }
+
+    public int getHighGamma () {
+        return highGamma;
     }
 }

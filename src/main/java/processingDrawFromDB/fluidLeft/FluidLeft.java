@@ -1,22 +1,25 @@
-package fluidLeft;
+package processingDrawFromDB.fluidLeft;
 
-import processing.core.PApplet;
 import com.thomasdiewald.pixelflow.java.DwPixelFlow;
 import com.thomasdiewald.pixelflow.java.dwgl.DwGLSLProgram;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluid2D;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluidStreamLines2D;
-
+import dataCollector.DBWriterAndReader;
+import dataCollector.EEGData;
+import processing.core.PApplet;
 import processing.opengl.PGraphics2D;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class FluidLeft extends PApplet{
+    DBWriterAndReader dbWriterAndReader = DBWriterAndReader.getInstance();
+    Timestamp lastTimeStamp = new Timestamp(System.currentTimeMillis());
+
     String PATH = new File("").getAbsolutePath();
-    String FILENAME = "like";
+    //    fluid state, 0 represent moving, bigger than 0 represent time of no data
+    int state = 0;
 
     int viewport_w = 1280;
     int viewport_h = 720;
@@ -42,9 +45,7 @@ public class FluidLeft extends PApplet{
     DwGLSLProgram customstreamlinerenderer;
 
     // data parameter
-    ArrayList<EEG> mindData;
     EEG data = new EEG();
-    int dataIndex = 0;
 
     // some state variables for the GUI/display
     int     BACKGROUND_COLOR           = 39;
@@ -53,11 +54,11 @@ public class FluidLeft extends PApplet{
     // image control
     FluidCircle[] fluidCircles = new FluidCircle[2];
 
-    int count = -1;
+    int count = 0;
     int countCycle = 60;
 
     public static void main (String[] args) {
-        PApplet.main("fluidLeft.FluidLeft");
+        PApplet.main("processingDrawFromDB.fluidLeft.FluidLeft");
     }
 
     private class MyFluidData implements DwFluid2D.FluidData {
@@ -85,8 +86,6 @@ public class FluidLeft extends PApplet{
                     vx = (fluidCircles[i].ppx1 - fluidCircles[i].px1) * 4 * noise(fluidCircles[i].px1, fluidCircles[i].py1);
                     vy = (fluidCircles[i].ppy1 - fluidCircles[i].py1) * 4 * noise(fluidCircles[i].ppx1, fluidCircles[i].ppy1);
 
-                    //println(px1 + " " + py1 + " " + vx + " " + vy);
-
                     fluid.addVelocity(fluidCircles[i].px1, fluidCircles[i].py1, random(20, 30), vx, vy);
 
                     fluidCircles[i].ppx1 = fluidCircles[i].px1;
@@ -97,40 +96,12 @@ public class FluidLeft extends PApplet{
         }
     }
 
-
-
     public void settings() {
         size(viewport_w, viewport_h, P2D);
         smooth(4);
     }
 
     public void setup() {
-        try {
-            mindData = new ArrayList<EEG>();
-
-            FileReader file = new FileReader(PATH + "\\dataCollector\\dataFile\\" + FILENAME + ".txt");
-
-            BufferedReader in = new BufferedReader(file);
-
-            String buffer;
-            String[] buffers;
-            while ((buffer = in.readLine()) != null) {
-                buffers = buffer.split(";");
-                mindData.add(new EEG(
-                        Integer.parseInt(buffers[2]),
-                        Integer.parseInt(buffers[3]),
-                        Integer.parseInt(buffers[4]),
-                        Integer.parseInt(buffers[5]),
-                        Integer.parseInt(buffers[6]),
-                        Integer.parseInt(buffers[7]),
-                        Integer.parseInt(buffers[8]),
-                        Integer.parseInt(buffers[9])));
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
         surface.setLocation(viewport_x, viewport_y);
 
         // main library context
@@ -139,7 +110,7 @@ public class FluidLeft extends PApplet{
         // visualization of the velocity field
         streamlines = new DwFluidStreamLines2D(context);
 
-        String dir = PATH + "\\processingDrawFromFile\\fluidfrag\\";
+        String dir = PATH + "\\src\\main\\java\\fluidfrag\\";
 
         customstreamlinerenderer = context.createShader(
                 dir+"streamlineRender_Custom.vert",
@@ -191,10 +162,21 @@ public class FluidLeft extends PApplet{
 
     public void draw() {
         if (count == 0) {
-            dataIndex = (dataIndex + 1) % mindData.size(); //<>//
-            data = mindData.get(dataIndex);
-            fluidCircles[0] = new FluidCircle(map(data.lowBeta, 0, 100, 150, 250));
-            fluidCircles[1] = new FluidCircle(map(data.highBeta, 0, 100, 250, 350));
+            EEGData eegData = dbWriterAndReader.readLastData();
+            if (eegData.getOccurTime().getTime() > lastTimeStamp.getTime()) {
+                lastTimeStamp = eegData.getOccurTime();
+                data = new EEG(eegData.getDelta(), eegData.getTheta(), eegData.getLowAlpha(), eegData.getHighAlpha(), eegData.getLowBeta(), eegData.getHighBeta(), eegData.getLowGamma(), eegData.getHighGamma());
+                fluidCircles[0] = new FluidCircle(map(data.lowBeta, 0, 100, 150, 250));
+                fluidCircles[1] = new FluidCircle(map(data.highBeta, 0, 100, 250, 350));
+                if (state > 5)
+                    fluid_start();
+                state = 0;
+            } else {
+                state++;
+
+                if (state > 5)
+                    fluid_reset();
+            }
         }
 
         // update simulation
@@ -230,7 +212,7 @@ public class FluidLeft extends PApplet{
         );
         fluid.reset();
 
-        count = -1;
+        count = 0;
     }
 
     public void fluid_start() { //<>//
@@ -239,15 +221,6 @@ public class FluidLeft extends PApplet{
         fluid.addCallback_FluiData(cb_fluid_data);
 
         count = 0;
-    }
-
-    public void keyReleased() {
-        if (key == 'r') {       // restart simulation
-            fluid_reset();
-        }
-        if (key == '1') { // init fluid circle
-            fluid_start();
-        }
     }
 
     class FluidCircle {

@@ -1,4 +1,4 @@
-package fluidRight;
+package processingDrawFromFile.fluidRight;
 
 import processing.core.PApplet;
 
@@ -7,7 +7,6 @@ import com.thomasdiewald.pixelflow.java.dwgl.DwGLSLProgram;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluid2D;
 import com.thomasdiewald.pixelflow.java.fluid.DwFluidStreamLines2D;
 
-import processing.core.*;
 import processing.opengl.PGraphics2D;
 
 import java.io.BufferedReader;
@@ -59,7 +58,7 @@ public class FluidRight extends PApplet {
     int countCycle = 60;
 
     public static void main (String[] args) {
-        PApplet.main("fluidRight.FluidRight");
+        PApplet.main("processingDrawFromFile.fluidRight.FluidRight");
     }
 
     private class MyFluidData implements DwFluid2D.FluidData {
@@ -108,7 +107,7 @@ public class FluidRight extends PApplet {
         try {
             mindData = new ArrayList<EEG>();
 
-            FileReader file = new FileReader(PATH + "\\dataCollector\\dataFile\\" + FILENAME + ".txt");
+            FileReader file = new FileReader(PATH + "\\src\\main\\java\\dataCollector\\dataFile\\" + FILENAME + ".txt");
 
             BufferedReader in = new BufferedReader(file);
 
@@ -139,7 +138,7 @@ public class FluidRight extends PApplet {
         // visualization of the velocity field
         streamlines = new DwFluidStreamLines2D(context);
 
-        String dir = PATH + "\\processingDrawFromFile\\fluidfrag\\";
+        String dir = PATH + "\\src\\main\\java\\fluidfrag\\";
 
         customstreamlinerenderer = context.createShader(
                 dir+"streamlineRender_Custom.vert",

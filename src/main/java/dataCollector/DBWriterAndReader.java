@@ -1,3 +1,5 @@
+package dataCollector;
+
 import java.sql.*;
 
 public class DBWriterAndReader {

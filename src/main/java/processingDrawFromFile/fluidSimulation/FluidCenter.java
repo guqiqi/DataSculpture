@@ -1,4 +1,4 @@
-package fluidSimulation;
+package processingDrawFromFile.fluidSimulation;
 
 import processing.core.PApplet;
 import com.thomasdiewald.pixelflow.java.DwPixelFlow;
@@ -54,7 +54,7 @@ public class FluidCenter extends PApplet{
     int countCycle = 60;
 
     public static void main (String[] args) {
-        PApplet.main("fluidSimulation.FluidCenter");
+        PApplet.main("processingDrawFromFile.fluidSimulation.FluidCenter");
     }
     public void settings() {
         size(1440, 900, P2D);
@@ -65,7 +65,7 @@ public class FluidCenter extends PApplet{
         try {
             mindData = new ArrayList<EEG>();
 
-            FileReader file = new FileReader(PATH + "\\dataCollector\\dataFile\\" + FILENAME + ".txt");
+            FileReader file = new FileReader(PATH + "\\src\\main\\java\\\\dataCollector\\dataFile\\" + FILENAME + ".txt");
 
             BufferedReader in = new BufferedReader(file);
 
@@ -90,7 +90,7 @@ public class FluidCenter extends PApplet{
 
         //set up surface graphics
         surfaceGraphics = createGraphics(width, height);
-        pg = loadImage(PATH + "\\processingDrawFromFile\\fluidSimulation\\data\\bg.png");
+        pg = loadImage(PATH + "\\src\\main\\java\\processingDrawFromFile\\fluidSimulation\\data\\bg.png");
         pg.resize(width, height);
         CENTER_RADIUS = (float) (CENTER_RADIUS * (height / 1600.0));
 
@@ -190,9 +190,6 @@ public class FluidCenter extends PApplet{
             surfaceGraphics.curveVertex(x, y);
         }
         surfaceGraphics.endShape();
-    }
-
-    void fluid_reset() {
     }
 
     public void keyReleased () {
