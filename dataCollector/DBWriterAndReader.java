@@ -37,7 +37,7 @@ public class DBWriterAndReader {
     public void insert(int attention, int meditation, int mytheta, int mydelta, int mylow_alpha, int myhigh_alpha,
                        int mylow_beta, int myhigh_beta, int mylow_gamma, int myhigh_gamma) {
         try {
-            PreparedStatement ps = conn.prepareStatement("insert into eeg_data(occuer_time, attention, meditation, " +
+            PreparedStatement ps = conn.prepareStatement("insert into eeg_data(occur_time, attention, meditation, " +
                     "delta, theta, low_alpha, high_alpha, low_beta, high_beta, low_gamma, high_gamma)" +
                     " values(?,?,?,?,?,?,?,?,?,?,?)");
             System.out.println(System.currentTimeMillis());

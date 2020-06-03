@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.nio.charset.Charset;
 import java.sql.Timestamp;
 
-public class JsonReader {
+public class JsonReaderToFile {
 	static String fileName = "like" ;
 	static String thinkgearHost = "127.0.0.1";
 	static int thinkgearPort = 13854;
@@ -36,7 +36,7 @@ public class JsonReader {
 		System.out.println("Sending command "+command);
 		write(command);
 		reader = new BufferedReader(new InputStreamReader(input, Charset.forName("UTF-8")));
-		//DosyayaEkle("timeStamp;poorSignalLevel;attention;meditation;delta;theta;lowAlpha;highAlpha;lowBeta;highBeta;lowGamma;highGamma;blinkStrength", "mindStream.csv");
+
 		while(true == flag) {
 			clientEvent();
 		}
@@ -98,11 +98,11 @@ public class JsonReader {
 	}
 	public static void writeFile(String text){
 		try{
-			File dosya = new File("./datafile/"+fileName + ".txt");
-			FileWriter yazici = new FileWriter(dosya,true);
-			BufferedWriter yaz = new BufferedWriter(yazici);
-			yaz.write(text+"\r\n");
-			yaz.close();
+			File file = new File(".\\dataCollector\\dataFile\\"+fileName + ".txt");
+			FileWriter fileWriter = new FileWriter(file,true);
+			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(text+"\r\n");
+            bufferedWriter.close();
 		}
 		catch (Exception hata){
 			hata.printStackTrace();
