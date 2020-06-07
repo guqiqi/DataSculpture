@@ -14,7 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FluidLeft extends PApplet{
+public class FluidLeft extends PApplet {
     String PATH = new File("").getAbsolutePath();
     String FILENAME = "like";
 
@@ -47,8 +47,8 @@ public class FluidLeft extends PApplet{
     int dataIndex = 0;
 
     // some state variables for the GUI/display
-    int     BACKGROUND_COLOR           = 39;
-    int     STREAMLINE_DENSITY         = 15;
+    int BACKGROUND_COLOR = 39;
+    int STREAMLINE_DENSITY = 15;
 
     // image control
     FluidCircle[] fluidCircles = new FluidCircle[2];
@@ -56,7 +56,7 @@ public class FluidLeft extends PApplet{
     int count = -1;
     int countCycle = 60;
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         PApplet.main("processingDrawFromFile.fluidLeft.FluidLeft");
     }
 
@@ -98,7 +98,6 @@ public class FluidLeft extends PApplet{
     }
 
 
-
     public void settings() {
         size(viewport_w, viewport_h, P2D);
         smooth(4);
@@ -108,7 +107,9 @@ public class FluidLeft extends PApplet{
         try {
             mindData = new ArrayList<EEG>();
 
-            FileReader file = new FileReader(PATH + "\\src\\main\\java\\dataCollector\\dataFile\\" + FILENAME + ".txt");
+            FileReader file =
+                    new FileReader(PATH + File.separator + "src" + File.separator + "main" + File.separator
+                            + "java" + File.separator + "dataCollector" + File.separator + "dataFile" + File.separator + FILENAME + ".txt");
 
             BufferedReader in = new BufferedReader(file);
 
@@ -126,8 +127,7 @@ public class FluidLeft extends PApplet{
                         Integer.parseInt(buffers[8]),
                         Integer.parseInt(buffers[9])));
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -142,17 +142,17 @@ public class FluidLeft extends PApplet{
         String dir = PATH + "\\src\\main\\java\\fluidfrag\\";
 
         customstreamlinerenderer = context.createShader(
-                dir+"streamlineRender_Custom.vert",
-                dir+"streamlineRender_Custom.frag");
+                dir + "streamlineRender_Custom.vert",
+                dir + "streamlineRender_Custom.frag");
 
         // fluid simulation
         fluid = new DwFluid2D(context, viewport_w, viewport_h, fluidgrid_scale);
 
         // set some simulation parameters
-        fluid.param.dissipation_density     = 0.5f;
-        fluid.param.dissipation_velocity    = 0.99f;
+        fluid.param.dissipation_density = 0.5f;
+        fluid.param.dissipation_velocity = 0.99f;
         fluid.param.dissipation_temperature = 0.30f;
-        fluid.param.vorticity               = 0.10f;
+        fluid.param.vorticity = 0.10f;
 
         // pgraphics for fluid
         pg_fluid = (PGraphics2D) createGraphics(viewport_w, viewport_h, P2D);
@@ -223,7 +223,7 @@ public class FluidLeft extends PApplet{
 
     public void fluid_reset() {
         // reset update method
-        fluid.addCallback_FluiData(new  DwFluid2D.FluidData() {
+        fluid.addCallback_FluiData(new DwFluid2D.FluidData() {
                                        public void update(DwFluid2D fluid) {
                                        }
                                    }

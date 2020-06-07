@@ -56,19 +56,21 @@ public class FluidCenterDB extends PApplet {
     int count = 0;
     int countCycle = 60;
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         PApplet.main("processingDrawFromDB.fluidSimulation.FluidCenterDB");
     }
 
-    public void settings () {
+    public void settings() {
         size(1440, 900, P2D);
 //        fullScreen(P2D);
     }
 
-    public void setup () {
+    public void setup() {
         //set up surface graphics
         surfaceGraphics = createGraphics(width, height);
-        pg = loadImage(PATH + "\\src\\main\\java\\processingDrawFromDB\\fluidSimulation\\data\\bg.png");
+        pg = loadImage(PATH + File.separator + "src" + File.separator + "main" + File.separator + "java"
+                + File.separator + "processingDrawFromDB" + File.separator + "fluidSimulation" + File.separator +
+                "data" + File.separator + "bg.png");
         pg.resize(width, height);
         CENTER_RADIUS = (float) (CENTER_RADIUS * (height / 1600.0));
 
@@ -89,7 +91,7 @@ public class FluidCenterDB extends PApplet {
     }
 
 
-    public void draw () {
+    public void draw() {
         if (count % countCycle == 0) {
             EEGData eegData = dbWriterAndReader.readLastData();
             if (eegData.getOccurTime().getTime() > lastTimeStamp.getTime()) {
@@ -136,7 +138,7 @@ public class FluidCenterDB extends PApplet {
     float kMax = 1;
     int n = 20; // num of circles
 
-    void renderSurfaceGraphics () {
+    void renderSurfaceGraphics() {
         surfaceGraphics.beginDraw();
 
         // color of the circle line
@@ -166,7 +168,7 @@ public class FluidCenterDB extends PApplet {
         surfaceGraphics.endDraw();
     }
 
-    void blob (float size, float xCenter, float yCenter, float k, float t, float noisiness) {
+    void blob(float size, float xCenter, float yCenter, float k, float t, float noisiness) {
         surfaceGraphics.beginShape();
         surfaceGraphics.noFill();
         float angleStep = TWO_PI / 12;
@@ -182,7 +184,7 @@ public class FluidCenterDB extends PApplet {
         surfaceGraphics.endShape();
     }
 
-    void fluidReset () {
+    void fluidReset() {
         // setup parameter of outer graphics
         inter = 15; // difference between the sizes of two blobs
         maxNoise = 0;
@@ -190,7 +192,7 @@ public class FluidCenterDB extends PApplet {
 
         // reset update method
         fluid.addCallback_FluiData(new DwFluid2D.FluidData() {
-                                       public void update (DwFluid2D fluid) {
+                                       public void update(DwFluid2D fluid) {
                                        }
                                    }
         );
@@ -199,7 +201,7 @@ public class FluidCenterDB extends PApplet {
         count = 0;
     }
 
-    void fluidStart () {
+    void fluidStart() {
         // setup parameter of outer graphics
         inter = (float) 0.05; // difference between the sizes of two blobs
         maxNoise = 500;
@@ -214,7 +216,7 @@ public class FluidCenterDB extends PApplet {
 
         // implement updating method
         fluid.addCallback_FluiData(new DwFluid2D.FluidData() {
-                                       public void update (DwFluid2D fluid) {
+                                       public void update(DwFluid2D fluid) {
                                            if (frameCount % 3 == 0) {
                                                for (int i = 0; i < particleSize; i++) {
                                                    if (particles[i].point.x > width || particles[i].point.x < 0 || particles[i].point.y > height || particles[i].point.y < 0) {
@@ -250,21 +252,21 @@ public class FluidCenterDB extends PApplet {
         float radius;
         int radiansCount = 0;
 
-        Particle (float x, float y, int c1, float radius) {
+        Particle(float x, float y, int c1, float radius) {
             point = new PVector(x, y);
             this.c1 = c1;
             this.radius = radius;
             this.radiansCount = (int) random(360);
         }
 
-        Particle (int c1, float radius) {
+        Particle(int c1, float radius) {
             changePoint();
             this.c1 = c1;
             this.radius = radius;
             this.radiansCount = (int) random(360);
         }
 
-        void changePoint () {
+        void changePoint() {
             radiansCount = (radiansCount + 5) % 360;
             point = new PVector(width / 2 + (CENTER_RADIUS + 100 * random(1)) * cos(radians(this.radiansCount)), height / 2 + (CENTER_RADIUS + 100 * random(1)) * sin(radians(this.radiansCount)));
             //point = new PVector(width / 2 + CENTER_RADIUS * cos(radians(this.radiansCount)), height / 2 + CENTER_RADIUS * sin(radians(this.radiansCount)));
@@ -281,17 +283,17 @@ public class FluidCenterDB extends PApplet {
         float lowGamma = (float) 0.0;
         float highGamma = (float) 0.0;
 
-        EEG () {
+        EEG() {
         }
 
-        EEG (int delta,
-             int theta,
-             int lowAlpha,
-             int highAlpha,
-             int lowBeta,
-             int highBeta,
-             int lowGamma,
-             int highGamma) {
+        EEG(int delta,
+            int theta,
+            int lowAlpha,
+            int highAlpha,
+            int lowBeta,
+            int highBeta,
+            int lowGamma,
+            int highGamma) {
             this.delta = map(delta, 0, 3000000, 0, 100);
             this.theta = map(theta, 10000, 300000, 0, 100);
             this.lowAlpha = map(lowAlpha, 0, 350000, 200, 400);

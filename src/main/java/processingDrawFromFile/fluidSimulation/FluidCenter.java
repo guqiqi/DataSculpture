@@ -65,7 +65,9 @@ public class FluidCenter extends PApplet{
         try {
             mindData = new ArrayList<EEG>();
 
-            FileReader file = new FileReader(PATH + "\\src\\main\\java\\\\dataCollector\\dataFile\\" + FILENAME + ".txt");
+            FileReader file = new FileReader(PATH + File.separator + "src" + File.separator + "main"
+                    + File.separator + "java" + File.separator + "dataCollector" + File.separator + "dataFile"
+                    + File.separator + FILENAME + ".txt");
 
             BufferedReader in = new BufferedReader(file);
 
@@ -90,8 +92,9 @@ public class FluidCenter extends PApplet{
 
         //set up surface graphics
         surfaceGraphics = createGraphics(width, height);
-        pg = loadImage(PATH + "\\src\\main\\java\\processingDrawFromFile\\fluidSimulation\\data\\bg.png");
-        pg.resize(width, height);
+        pg = loadImage(PATH + File.separator + "src" + File.separator + "main" + File.separator + "java"
+                + File.separator + "processingDrawFromDB" + File.separator + "fluidSimulation" + File.separator +
+                "data" + File.separator + "bg.png");        pg.resize(width, height);
         CENTER_RADIUS = (float) (CENTER_RADIUS * (height / 1600.0));
 
         // library context
