@@ -1,12 +1,14 @@
 package dataCollector;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBWriterAndReader {
-    public static final String url = "jdbc:mysql://127.0.0.1/data_sculpture";
+    public static final String url = "jdbc:mysql://rm-bp1024wxq24xe9l28no.mysql.rds.aliyuncs.com:3306/data_sculpture";
     public static final String name = "com.mysql.jdbc.Driver";
-    public static final String user = "root";
-    public static final String password = "123456";
+    public static final String user = "sculpture";
+    public static final String password = "DataSculpture1";
 
     private static DBWriterAndReader dbWriterAndReader;
     private Connection conn = null;
@@ -79,5 +81,22 @@ public class DBWriterAndReader {
         }
 
         return eegData;
+    }
+
+    public List<BraceletData> readLastBraceletData(){
+        List<BraceletData> braceletDataList = new ArrayList<BraceletData>();
+        BraceletData braceletData;
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM record ORDER BY id DESC LIMIT 50");
+            ResultSet rs=ps.executeQuery();
+            while (rs.next()) {
+                braceletData = new BraceletData(rs.getFloat("temp"), rs.getInt("br"), rs.getInt("bo"));
+                braceletDataList.add(braceletData);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return braceletDataList;
     }
 }
