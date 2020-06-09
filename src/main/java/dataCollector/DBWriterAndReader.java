@@ -90,7 +90,7 @@ public class DBWriterAndReader {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM record ORDER BY id DESC LIMIT 50");
             ResultSet rs=ps.executeQuery();
             while (rs.next()) {
-                braceletData = new BraceletData(rs.getFloat("temp"), rs.getInt("br"), rs.getInt("bo"));
+                braceletData = new BraceletData(rs.getFloat("temp"), rs.getInt("hr"), rs.getInt("bo"));
                 braceletDataList.add(braceletData);
             }
         }catch (SQLException e){
