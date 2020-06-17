@@ -20,7 +20,7 @@ public class Flower extends PApplet {
     int N;
     float rot0,v;
 
-    int frame = 0;
+    int frame = 28;
 
     public static void main (String[] args) {
         PApplet.main("processingDrawFromDB.flower.Flower");
@@ -60,8 +60,9 @@ public class Flower extends PApplet {
 
         background(235);
 
+//        控制速度
         rot0 = random(TWO_PI);
-        N = floor(random(5,15));
+        N = floor(random(10,15));
     }
     public void settings() {
         size(1000, 1000, P2D);
@@ -128,21 +129,21 @@ public class Flower extends PApplet {
         return new PVector(xxx,yyy,inv);
     }
 
-    void saveF(){
+    void saveF(int num){
         println("saving");
-        saveFrame("res"+floor(random(1000000))+".png");
+        saveFrame("res"+num+".png");
         //stop();
     }
 
     public void keyPressed() {
-        saveF();
+        saveF(floor(random(1000000)));
     }
 
     public void mousePressed(){
         initialize();
     }
 
-    int numFrames = 50;
+    int numFrames = 90;
 
     int K = 8500;
 
@@ -154,9 +155,9 @@ public class Flower extends PApplet {
                 step();
             }
 
-//            if (frame == numFrames) {
-//                saveF();
-//            }
+            if (frame % 30 == 0) {
+                saveF(frame / 50);
+            }
         }
     }
 }
